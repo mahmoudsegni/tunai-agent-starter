@@ -106,9 +106,13 @@ Every request to TunAI is authenticated with an API key. Getting one takes a few
 
 ### Step 1. Create your account
 
-1. Open **[console.tunai.tn](https://console.tunai.tn)** and sign up, or sign in if you already use TunAI.
-2. Accept the Terms of Service and the Acceptable Use Policy. The console asks once, before your first key.
-3. Confirm your email with the code TunAI sends you. Paying needs a confirmed email.
+1. Open **[console.tunai.tn](https://console.tunai.tn)** and click **Get an API key** at the top right. If you already use the TunAI chat app, click **Sign in** instead: it is the same account.
+2. Sign up with your email and a password, or with Google or LinkedIn.
+
+   <img src="docs/images/01-sign-up.png" width="300" alt="The TunAI sign-up form: email and password, or continue with Google or LinkedIn">
+
+3. Accept the Terms of Service and the Acceptable Use Policy. The console asks once, before your first key.
+4. Confirm your email with the code TunAI sends you. Paying needs a confirmed email.
 
 ### Step 2. Add balance
 
@@ -116,7 +120,9 @@ The API is pay-as-you-go: each request is charged to your account balance, at th
 
 1. Open **[Billing](https://console.tunai.tn/billing)** and click **Top up credits**.
 2. Pick an amount (50, 100, 200 or 500 TND) or enter your own, from 10 TND.
-3. Fill in your billing details, then pay in dinar on ClicToPay's secure page. Prices include VAT.
+3. Fill in your billing details and click **Continue to payment**, then pay in dinar on ClicToPay's secure page. Prices include VAT.
+
+<img src="docs/images/02-top-up.png" width="720" alt="The Top up credits dialog on the Billing page: preset amounts, the amount in TND, and the billing details form">
 
 Credits do not expire. Running everything in this repository costs well under one dinar.
 
@@ -133,7 +139,17 @@ Credits do not expire. Running everything in this repository costs well under on
    | Requests / min | `60` is plenty |
    | Budget / month (TND) | `5` is plenty. The key stops at this amount, even if your balance is higher |
 
+   <img src="docs/images/03-create-key.png" width="720" alt="The Create new API key dialog with limits: Chat, Embeddings, Audio and Rerank allowed, 60 requests per minute, 5 TND per month">
+
 4. Click **Create key** and copy the key. It starts with `sk-tunai-`. **It is shown only once:** if you lose it, revoke it and create another.
+
+   <img src="docs/images/04-copy-key.png" width="720" alt="The Save your API key dialog showing an example key and a Copy button">
+
+5. The key now appears in your list with its limits. The icons on its row open its usage, copy its prefix, and revoke it.
+
+   <img src="docs/images/05-key-list.png" width="720" alt="The API keys list with the new key, its allowed endpoints, 60 requests per minute and 5 TND per month">
+
+<sub>Screenshots use a demo account. The key shown is not real.</sub>
 
 ### Step 4. Check that it works
 
@@ -406,6 +422,7 @@ stock_tool = Tool(
 ```text
 tunai-agent-starter/
 ├── docs/api-cheatsheet.md    Every endpoint as curl, with responses, headers and errors
+├── docs/images/              Console screenshots for the API key guide
 ├── examples/                 Five standalone scripts, one endpoint each
 ├── knowledge_base/           The shop's documents (Markdown) the agent searches
 ├── data/orders.json          Sample orders behind get_order_status
