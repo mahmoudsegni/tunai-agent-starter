@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/mahmoudsegni/tunai-agent-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/mahmoudsegni/tunai-agent-starter/actions/workflows/ci.yml)
 
+**[TunAI](https://tunai.tn)** · **[Get an API key](#get-your-tunai-api-key)** · [Developer console](https://console.tunai.tn) · [Models and prices](https://console.tunai.tn/docs/models) · [API reference](https://console.tunai.tn/docs/api)
+
 A reference implementation of a **tool-calling agent** on the [TunAI](https://tunai.tn) API, with a step-by-step guide. It uses four TunAI endpoints: chat completions with function calling, embeddings, rerank and speech-to-text.
 
 The sample agent is a customer-support assistant for **Dar Jasmin**, a fictional online shop selling Tunisian ceramics. It answers from the shop's policies with citations, looks up orders, computes amounts exactly, and accepts voice notes. It is small enough to read in one sitting, and structured the way you would build a real one.
@@ -30,15 +32,16 @@ order number so I can help you properly.
 ## Contents
 
 1. [How it works](#how-it-works)
-2. [Quickstart](#quickstart)
-3. [Learn the endpoints, one step at a time](#learn-the-endpoints-one-step-at-a-time)
-4. [Run the agent](#run-the-agent)
-5. [The agent, piece by piece](#the-agent-piece-by-piece)
-6. [Choosing models](#choosing-models)
-7. [Make it yours](#make-it-yours)
-8. [Production checklist](#production-checklist)
-9. [Troubleshooting](#troubleshooting)
-10. [Project layout](#project-layout)
+2. [Get your TunAI API key](#get-your-tunai-api-key)
+3. [Quickstart](#quickstart)
+4. [Learn the endpoints, one step at a time](#learn-the-endpoints-one-step-at-a-time)
+5. [Run the agent](#run-the-agent)
+6. [The agent, piece by piece](#the-agent-piece-by-piece)
+7. [Choosing models](#choosing-models)
+8. [Make it yours](#make-it-yours)
+9. [Production checklist](#production-checklist)
+10. [Troubleshooting](#troubleshooting)
+11. [Project layout](#project-layout)
 
 ---
 
@@ -88,18 +91,78 @@ Base URL: `https://api.tunai.tn/v1`. Authentication: `Authorization: Bearer sk-t
 
 ---
 
+## Get your TunAI API key
+
+Every request to TunAI is authenticated with an API key. Getting one takes a few minutes.
+
+| | |
+|---|---|
+| Website | [tunai.tn](https://tunai.tn) |
+| Developer console: keys, balance, usage, logs | [console.tunai.tn](https://console.tunai.tn) |
+| Models, with prices in TND | [console.tunai.tn/docs/models](https://console.tunai.tn/docs/models) |
+| API reference | [console.tunai.tn/docs/api](https://console.tunai.tn/docs/api) |
+| API base URL | `https://api.tunai.tn/v1` |
+| Support | [support@tunai.tn](mailto:support@tunai.tn) |
+
+### Step 1. Create your account
+
+1. Open **[console.tunai.tn](https://console.tunai.tn)** and sign up, or sign in if you already use TunAI.
+2. Accept the Terms of Service and the Acceptable Use Policy. The console asks once, before your first key.
+3. Confirm your email with the code TunAI sends you. Paying needs a confirmed email.
+
+### Step 2. Add balance
+
+The API is pay-as-you-go: each request is charged to your account balance, at the per-token prices listed on [Supported models](https://console.tunai.tn/docs/models).
+
+1. Open **[Billing](https://console.tunai.tn/billing)** and click **Top up credits**.
+2. Pick an amount (50, 100, 200 or 500 TND) or enter your own, from 10 TND.
+3. Fill in your billing details, then pay in dinar on ClicToPay's secure page. Prices include VAT.
+
+Credits do not expire. Running everything in this repository costs well under one dinar.
+
+### Step 3. Create the key
+
+1. Open **[API Keys](https://console.tunai.tn/api-keys)** and click **Create key**.
+2. Name it after where it will run, for example `tunai-agent-starter (laptop)`.
+3. Optionally, click **Set limits** to restrict the key:
+
+   | Limit | For this project |
+   |---|---|
+   | Allowed endpoints | `Chat`, `Embeddings`, `Rerank` and `Audio`. Leave all unchecked for full access |
+   | Expires on | A date, for a key you only need for a while |
+   | Requests / min | `60` is plenty |
+   | Budget / month (TND) | `5` is plenty. The key stops at this amount, even if your balance is higher |
+
+4. Click **Create key** and copy the key. It starts with `sk-tunai-`. **It is shown only once:** if you lose it, revoke it and create another.
+
+### Step 4. Check that it works
+
+```bash
+export TUNAI_API_KEY="sk-tunai-..."   # paste your key
+
+curl https://api.tunai.tn/v1/chat/completions \
+  -H "Authorization: Bearer $TUNAI_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "gpt-5.4-mini", "messages": [{"role": "user", "content": "Say hello in Tunisian Derja"}]}'
+```
+
+A JSON reply with `choices[0].message.content` means the key, the balance and the endpoint all work. If you get an error, its `code` says what to fix: see [Troubleshooting](#troubleshooting).
+
+### Keep the key safe
+
+- Your key spends your balance. Treat it like a password.
+- Keep it on a server or your own machine, in `.env` or a secret manager. **Never put it in a browser, a mobile app or a Git repository.** This project's `.env` is git-ignored, and its CI fails if a key is committed.
+- Use one key per app or environment, so you can revoke one without breaking the others.
+- If a key leaks, revoke it on the [API Keys](https://console.tunai.tn/api-keys) page at once. It stops working immediately.
+- Each key's spend and requests are on the **[Usage](https://console.tunai.tn/usage)** and **[Logs](https://console.tunai.tn/logs)** pages.
+
+---
+
 ## Quickstart
 
-You need Python 3.10+ and a TunAI account.
+You need Python 3.10+ and a TunAI API key ([get one](#get-your-tunai-api-key)).
 
-### 1. Create an API key
-
-1. Sign in at **[console.tunai.tn](https://console.tunai.tn)** and accept the Terms of Service (the console asks once, before your first key).
-2. Open **API keys** and create a key. For this project, you can restrict it to the `chat`, `embeddings`, `rerank` and `audio` scopes, and set a **monthly budget** and a **requests-per-minute** limit. A key with no scopes can call every endpoint.
-3. Copy the key when it is shown (it starts with `sk-tunai-`) and store it somewhere safe. You will not see it again.
-4. API usage is paid from your TunAI balance. Top it up in dinar from **Billing** if needed. The examples here cost a fraction of a dinar.
-
-### 2. Install
+### 1. Install
 
 ```bash
 git clone https://github.com/mahmoudsegni/tunai-agent-starter.git
@@ -108,7 +171,7 @@ python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\act
 pip install -e ".[dev]"
 ```
 
-### 3. Configure
+### 2. Configure
 
 ```bash
 cp .env.example .env
