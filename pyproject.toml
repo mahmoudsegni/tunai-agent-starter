@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tunai-agent"
+version = "0.1.0"
+description = "A reference tool-calling agent built on the TunAI API: chat completions, embeddings, rerank and speech-to-text."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = [
+    "openai>=1.40,<3",
+    "httpx>=0.27,<1",
+    "python-dotenv>=1.0,<2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[project.scripts]
+tunai-agent = "tunai_agent.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tunai_agent"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+# "›" separates a source from its heading in citations, e.g. "shipping.md › Fees".
+allowed-confusables = ["›"]

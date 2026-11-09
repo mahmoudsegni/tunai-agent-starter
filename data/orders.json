@@ -1,0 +1,59 @@
+[
+  {
+    "order_id": "DJ-1001",
+    "status": "delivered",
+    "placed_on": "2026-10-28",
+    "delivered_on": "2026-10-31",
+    "items": [
+      { "product": "Nabeul tajine plate, cobalt", "quantity": 2, "unit_price_tnd": 38.5 }
+    ],
+    "shipping": { "governorate": "Tunis", "fee_tnd": 7.0, "carrier": "Aramex", "tracking": "ARX-58123390" },
+    "payment": "card"
+  },
+  {
+    "order_id": "DJ-1002",
+    "status": "shipped",
+    "placed_on": "2026-11-04",
+    "estimated_delivery": "2026-11-10",
+    "items": [
+      { "product": "Sejnane clay vase, large", "quantity": 1, "unit_price_tnd": 120.0 },
+      { "product": "Olive wood serving spoon", "quantity": 3, "unit_price_tnd": 14.0 }
+    ],
+    "shipping": { "governorate": "Sfax", "fee_tnd": 0.0, "carrier": "Rapid-Poste", "tracking": "RP-77201145TN" },
+    "payment": "card"
+  },
+  {
+    "order_id": "DJ-1003",
+    "status": "processing",
+    "placed_on": "2026-11-07",
+    "estimated_delivery": "2026-11-13",
+    "items": [
+      { "product": "Hand-painted coffee cups, set of 6", "quantity": 1, "unit_price_tnd": 65.0 }
+    ],
+    "shipping": { "governorate": "Sousse", "fee_tnd": 9.0, "carrier": null, "tracking": null },
+    "payment": "cash_on_delivery"
+  },
+  {
+    "order_id": "DJ-1004",
+    "status": "cancelled",
+    "placed_on": "2026-11-01",
+    "cancelled_on": "2026-11-02",
+    "items": [
+      { "product": "Mosaic table, 60 cm", "quantity": 1, "unit_price_tnd": 340.0 }
+    ],
+    "shipping": { "governorate": "Bizerte", "fee_tnd": 0.0, "carrier": null, "tracking": null },
+    "payment": "card",
+    "refund": { "status": "refunded", "amount_tnd": 340.0, "refunded_on": "2026-11-05" }
+  },
+  {
+    "order_id": "DJ-1005",
+    "status": "delivery_failed",
+    "placed_on": "2026-11-02",
+    "items": [
+      { "product": "Guellala water jar", "quantity": 1, "unit_price_tnd": 55.0 }
+    ],
+    "shipping": { "governorate": "Gabès", "fee_tnd": 9.0, "carrier": "Rapid-Poste", "tracking": "RP-77198820TN" },
+    "payment": "cash_on_delivery",
+    "note": "Courier could not reach the customer on 2026-11-06. Parcel held at the Gabès post office until 2026-11-13."
+  }
+]
